@@ -101,6 +101,19 @@ public class JnlpDownloadServletMojo
      * @parameter
      */
     private List/*JarResource*/ commonJarResources;
+    
+    /**
+     * If (false) Jar resource contains inlined version (like artifactId-version)
+     * or (true) if jar is composed as artifactId version="version" - used by jnlpDownloadServlet
+     *
+     * <strong>Note:</strong> If this property is not defined, then will use a default value {@code utf-8}.
+     *
+     * Default is true for jnlpDownloadServlet
+     *
+     * @parameter expression="${outputJarVersions}" default-value="true"
+     * @since 1.0-beta-3
+     */
+    private boolean outputJarVersions = true;
 
     /**
      * {@inheritDoc}
@@ -424,6 +437,7 @@ public class JnlpDownloadServletMojo
                 getArtifactResolver().resolve( artifact, getRemoteRepositories(), getLocalRepository() );
                 jarResource.setArtifact( artifact );
                 checkForMainClass( jarResource );
+                jarResource.setOutputJarVersion(isOutputJarVersions());
                 jarResourceArtifacts.add( artifact );
             }
 
@@ -566,6 +580,8 @@ public class JnlpDownloadServletMojo
             getLog().debug( "jarResourceArtifacts = " + jarResourceArtifacts );
         }
 
+        boolean outputJarVersions = isOutputJarVersions();
+
         //for each transitive dependency, wrap it in a JarResource and add it to the collection of
         //existing jar resources
         for ( Iterator itr = transitiveResolvedArtifacts.iterator(); itr.hasNext(); )
@@ -579,7 +595,7 @@ public class JnlpDownloadServletMojo
                 JarResource newJarResource = new JarResource( resolvedArtifact );
                 if ( !jarResources.contains( newJarResource ) && !newJarResource.getType().equals( "pom" ) )
                 {
-                    newJarResource.setOutputJarVersion( true );
+					newJarResource.setOutputJarVersion( outputJarVersions );
                     jarResources.add( newJarResource );
                 }
             }
@@ -752,5 +768,9 @@ public class JnlpDownloadServletMojo
         }
 
     }
+    
+    public boolean isOutputJarVersions() {
+		return outputJarVersions;
+	}
 
 }

@@ -214,7 +214,7 @@ public abstract class AbstractBaseJnlpMojo
      * @since 1.0-beta-2
      */
     private String encoding;
-
+    
     private final List modifiedJnlpArtifacts = new ArrayList();
 
     // the jars to sign and pack are selected if they are prefixed by UNPROCESSED_PREFIX.
@@ -538,7 +538,7 @@ public abstract class AbstractBaseJnlpMojo
         }
         return encoding;
     }
-
+    
     /**
      * Confirms that if Pack200 is enabled, the MOJO is being executed in at least a Java 1.5 JVM.
      *
@@ -1042,8 +1042,12 @@ public abstract class AbstractBaseJnlpMojo
                 }
             }
 
-            signTool.sign( getSign(), jarFiles[i], signedJar );
+            String name = jarFiles[i].getName().substring(UNPROCESSED_PREFIX.length());
+            
+            getLog().info("Signing jar: " + name);
 
+            signTool.sign( getSign(), jarFiles[i], signedJar );
+            
             getLog().debug( "lastModified signedJar:" + signedJar.lastModified() + " unprocessed signed Jar:" +
                                 jarFiles[i].lastModified() );
 
