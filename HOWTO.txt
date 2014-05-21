@@ -1,1 +1,2 @@
 mvn clean install -Pjdk17 -Dmaven.test.skip=true
+mvn clean deploy -Pjdk17 -Dmaven.test.skip=true -Psonatype-oss-release

@@ -169,11 +169,15 @@
   </dependencies>
 
   <properties>
-    <javadocPluginVersion>2.7</javadocPluginVersion>
+    <javadocPluginVersion>2.5.1</javadocPluginVersion>
 
     <!-- versions of javadoc tagglets -->
     <mavenPluginToolsJavadocVersion>2.5.1</mavenPluginToolsJavadocVersion>
     <plexusComponentJavadocVersion>1.3.0</plexusComponentJavadocVersion>
+    
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<sonatypeOssDistMgmtSnapshotsUrl>https://oss.sonatype.org/content/repositories/snapshots/</sonatypeOssDistMgmtSnapshotsUrl>
+    
   </properties>
 
   <build>
@@ -217,6 +221,39 @@
           </execution>
         </executions>
       </plugin>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-enforcer-plugin</artifactId>
+		<version>1.0</version>
+		<executions>
+			<execution>
+				<id>enforce-maven</id>
+				<goals>
+					<goal>enforce</goal>
+				</goals>
+				<configuration>
+					<rules>
+						<requireMavenVersion>
+							<version>(,2.1.0),(2.1.0,2.2.0),(2.2.0,)</version>
+							<message>Maven 2.1.0 and 2.2.0 produce incorrect GPG signatures
+								and checksums respectively.</message>
+						</requireMavenVersion>
+					</rules>
+				</configuration>
+			</execution>
+		</executions>
+	</plugin>        
+      
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>      
+      
     </plugins>
 
     <pluginManagement>
@@ -371,6 +408,102 @@
         </plugins>
       </reporting>
     </profile>
+    
+
+
+<profile>
+	<id>sonatype-oss-release</id>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.7</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</profile>    
+
+
+    
+    
   </profiles>
+  
+  
+  
+
+<!--   adjustments for sonatype -->
+  	<repositories>
+		<repository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>${sonatypeOssDistMgmtSnapshotsUrl}</url>
+		</snapshotRepository>
+		<repository>
+			<id>sonatype-nexus-staging</id>
+			<name>Nexus Release Repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
+
+
+  <scm>
+    <connection>scm:git:git://github.com/nill14/webstart-maven-plugin.git</connection>
+    <developerConnection>scm:git:git://github.com/nill14/webstart-maven-plugin.git</developerConnection>
+    <url>git://github.com/nill14/webstart-maven-plugin.git</url>
+  </scm>
+  
 
 </project>
