@@ -6,6 +6,7 @@
     <version>1.0-beta-6</version>
   </parent>
 
+  <groupId>com.github.nill14.patch1</groupId>
   <artifactId>webstart-maven-plugin</artifactId>
   <version>1.0-beta-6</version>
   <packaging>maven-plugin</packaging>
@@ -36,6 +37,17 @@
 
 
   <dependencies>
+
+   <dependency>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>webstart-pack200-impl</artifactId>
+          <version>${project.version}</version>
+          <scope>runtime</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>keytool-api-1.7</artifactId>
+        </dependency>
 
     <dependency>
       <groupId>org.codehaus.mojo</groupId>
@@ -243,7 +255,7 @@
       </activation>
       <dependencies>
         <dependency>
-          <groupId>${project.groupId}</groupId>
+          <groupId>org.codehaus.mojo</groupId>
           <artifactId>webstart-pack200-impl</artifactId>
           <version>${project.version}</version>
           <scope>runtime</scope>
@@ -261,7 +273,7 @@
       </activation>
       <dependencies>
         <dependency>
-          <groupId>${project.groupId}</groupId>
+          <groupId>org.codehaus.mojo</groupId>
           <artifactId>webstart-pack200-impl</artifactId>
           <version>${project.version}</version>
           <scope>runtime</scope>
@@ -279,7 +291,7 @@
       </activation>
       <dependencies>
         <dependency>
-          <groupId>${project.groupId}</groupId>
+          <groupId>org.codehaus.mojo</groupId>
           <artifactId>webstart-pack200-impl</artifactId>
           <version>${project.version}</version>
           <scope>runtime</scope>

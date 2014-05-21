@@ -892,11 +892,13 @@ public abstract class AbstractBaseJnlpMojo
 
         for ( File unprocessedJarFile : jarFiles )
         {
-
             File signedJar = toProcessFile( unprocessedJarFile );
             ioUtil.deleteFile( signedJar );
 
             verboseLog( "Sign " + signedJar.getName() );
+            
+            String name = unprocessedJarFile.getName().substring(UNPROCESSED_PREFIX.length());
+            getLog().info("Signing jar: " + name);
             signTool.sign( sign, unprocessedJarFile, signedJar );
 
             getLog().debug( "lastModified signedJar:" + signedJar.lastModified() + " unprocessed signed Jar:" +
@@ -999,4 +1001,5 @@ public abstract class AbstractBaseJnlpMojo
         return new File( source.getParentFile(), targetFilename );
     }
 
+    
 }

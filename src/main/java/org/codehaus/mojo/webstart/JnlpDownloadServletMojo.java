@@ -104,6 +104,22 @@ public class JnlpDownloadServletMojo
     @Parameter
     private List<JarResource> commonJarResources;
 
+    
+
+    /**
+     * If (false) Jar resource contains inlined version (like artifactId-version)
+     * or (true) if jar is composed as artifactId version="version" - used by jnlpDownloadServlet
+     *
+     * <strong>Note:</strong> If this property is not defined, then will use a default value {@code utf-8}.
+     *
+     * Default is true for jnlpDownloadServlet
+     *
+     * @parameter expression="${outputJarVersions}" default-value="true"
+     * @since 1.0-beta-3
+     */
+    private boolean outputJarVersions = true;
+ 
+    
     /**
      */
     @Parameter( defaultValue = "${reactorProjects}", required = true, readonly = true )
@@ -522,8 +538,9 @@ public class JnlpDownloadServletMojo
             // existing jar resources (if not already in)
             for ( Artifact resolvedArtifact : transitiveArtifacts )
             {
-
-                ResolvedJarResource newJarResource = new ResolvedJarResource( resolvedArtifact );
+            	JarResource jarResource = new JarResource();
+            	jarResource.setOutputJarVersion(outputJarVersions);
+                ResolvedJarResource newJarResource = new ResolvedJarResource( jarResource, resolvedArtifact );
 
                 if ( !collectedJarResources.contains( newJarResource ) )
                 {
@@ -684,4 +701,8 @@ public class JnlpDownloadServletMojo
 //
 //        return sbuf.toString();
 //    }
+    
+    public boolean isOutputJarVersions() {
+		return outputJarVersions;
+	}
 }
